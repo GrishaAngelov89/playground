@@ -1,0 +1,948 @@
+mysql> select * from PersonInfo;
++----+-------+---------+--------+-----------+
+| ID | Name  | Address | Salary | CountryID |
++----+-------+---------+--------+-----------+
+|  1 | Peter | 221B    |    100 |         1 |
+|  2 | John  | 221B    |    200 |         2 |
+|  3 | Robin | 213B    |    200 |         3 |
+|  4 | NULL  | NULL    |   NULL |         0 |
++----+-------+---------+--------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> select * from Country;
++-----------+-------------+
+| CountryID | CountryName |
++-----------+-------------+
+|         1 | BG          |
+|         2 | DE          |
+|         3 | UK          |
+|         4 | USA         |
++-----------+-------------+
+4 rows in set (0.00 sec)
+
+mysql> select p.ID,p.Name,c.CountryName from PersonInfo p join Country c on p.CountryID = c.CountryID;
++----+-------+-------------+
+| ID | Name  | CountryName |
++----+-------+-------------+
+|  1 | Peter | BG          |
+|  2 | John  | DE          |
+|  3 | Robin | UK          |
++----+-------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> select p.ID,p.Name,c.CountryName from PersonInfo p left join Country c on p.CountryID=c.CountryID;
++----+-------+-------------+
+| ID | Name  | CountryName |
++----+-------+-------------+
+|  1 | Peter | BG          |
+|  2 | John  | DE          |
+|  3 | Robin | UK          |
+|  4 | NULL  | NULL        |
++----+-------+-------------+
+4 rows in set (0.00 sec)
+
+mysql> select p.ID,p.Name,c.CountryName from PersonInfo p right join Country c on p.CountryID=c.CountryID;
++------+-------+-------------+
+| ID   | Name  | CountryName |
++------+-------+-------------+
+|    1 | Peter | BG          |
+|    2 | John  | DE          |
+|    3 | Robin | UK          |
+| NULL | NULL  | USA         |
++------+-------+-------------+
+4 rows in set (0.00 sec)
+
+-------------------------------------------------------------
+
+join two tables
+
+select PersonInfo.Name,Towns.TownName,Country.CountryName from PersonInfo join Towns on PersonInfo.TownID = Towns.TownID join Country on PersonInfo.CountryID = Country.CountryID;
+
+---------------------
+select Name From PersonInfo where Salary = (select max(Salary) from PersonInfo);
+---------------------
+get the person with highest salary: select Name from PersonInfo order by Salary desc limit 1;
+---------------------
+
+
+
+mysql> select * from PersonInfo;
++----+-------+---------+--------+-----------+--------+
+| ID | Name  | Address | Salary | CountryID | TownID |
++----+-------+---------+--------+-----------+--------+
+|  1 | Peter | 221B    |    100 |         1 |      1 |
+|  2 | John  | 221B    |    200 |         2 |      2 |
+|  3 | Robin | 213B    |    300 |         3 |      3 |
+|  4 | NULL  | NULL    |   NULL |         0 |      0 |
++----+-------+---------+--------+-----------+--------+
+4 rows in set (0.00 sec)
+
+mysql> select count(*) as 'count all records',count(name) as 'not null records' from PersonInfo;
++-------------------+------------------+
+| count all records | not null records |
++-------------------+------------------+
+|                 4 |                3 |
++-------------------+------------------+
+1 row in set (0.00 sec)
+
+
+-------------------------------------------------------------
+
+
+mysql> select * from PersonInfo;
++----+-------+---------+--------+-----------+--------+
+| ID | Name  | Address | Salary | CountryID | TownID |
++----+-------+---------+--------+-----------+--------+
+|  1 | Peter | 221B    |    100 |         1 |      1 |
+|  2 | John  | 221B    |    200 |         2 |      2 |
+|  3 | Robin | 213B    |    300 |         3 |      3 |
+|  4 | NULL  | NULL    |   NULL |         0 |      0 |
++----+-------+---------+--------+-----------+--------+
+4 rows in set (0.00 sec)
+
+mysql> select avg(Salary), sum(salary)/count(*) from PersonInfo;
++-------------+----------------------+
+| avg(Salary) | sum(salary)/count(*) |
++-------------+----------------------+
+|    200.0000 |             150.0000 |
++-------------+----------------------+
+1 row in set (0.01 sec)
+
+-------------------------------------------------------------
+count number of tables in db
+select count(*) from information_schema.tables where table_schema='Bookstore';
+-------------------------------------------------------------
+
+mysql> desc information_schema.tables;
++-----------------+---------------------+------+-----+---------+-------+
+| Field           | Type                | Null | Key | Default | Extra |
++-----------------+---------------------+------+-----+---------+-------+
+| TABLE_CATALOG   | varchar(512)        | YES  |     | NULL    |       |
+| TABLE_SCHEMA    | varchar(64)         | NO   |     |         |       |
+| TABLE_NAME      | varchar(64)         | NO   |     |         |       |
+| TABLE_TYPE      | varchar(64)         | NO   |     |         |       |
+| ENGINE          | varchar(64)         | YES  |     | NULL    |       |
+| VERSION         | bigint(21) unsigned | YES  |     | NULL    |       |
+| ROW_FORMAT      | varchar(10)         | YES  |     | NULL    |       |
+| TABLE_ROWS      | bigint(21) unsigned | YES  |     | NULL    |       |
+| AVG_ROW_LENGTH  | bigint(21) unsigned | YES  |     | NULL    |       |
+| DATA_LENGTH     | bigint(21) unsigned | YES  |     | NULL    |       |
+| MAX_DATA_LENGTH | bigint(21) unsigned | YES  |     | NULL    |       |
+| INDEX_LENGTH    | bigint(21) unsigned | YES  |     | NULL    |       |
+| DATA_FREE       | bigint(21) unsigned | YES  |     | NULL    |       |
+| AUTO_INCREMENT  | bigint(21) unsigned | YES  |     | NULL    |       |
+| CREATE_TIME     | datetime            | YES  |     | NULL    |       |
+| UPDATE_TIME     | datetime            | YES  |     | NULL    |       |
+| CHECK_TIME      | datetime            | YES  |     | NULL    |       |
+| TABLE_COLLATION | varchar(32)         | YES  |     | NULL    |       |
+| CHECKSUM        | bigint(21) unsigned | YES  |     | NULL    |       |
+| CREATE_OPTIONS  | varchar(255)        | YES  |     | NULL    |       |
+| TABLE_COMMENT   | varchar(80)         | NO   |     |         |       |
++-----------------+---------------------+------+-----+---------+-------+
+21 rows in set (0.05 sec)
+-------------------------------------------------------------------------------------------
+
+mysql> select table_name from information_schema.tables where table_schema="Bookstore";
++------------+
+| table_name |
++------------+
+| Book       |
+| Publishers |
++------------+
+2 rows in set (0.00 sec)
+
+------------------------------------
+всички градове подредени по броя на посетилите ги хора;
+
+select city,count(city) from trip group by city order by count(city) desc; 
++----------+-------------+
+| city     | count(city) |
++----------+-------------+
+| zzzz     |           3 |
+| New York |           2 |
++----------+-------------+
+2 rows in set (0.00 sec)
+-----------------------------------------------------------
+mysql> select if (Name="Peter","A","B") from PersonInfo;
++---------------------------+
+| if (Name="Peter","A","B") |
++---------------------------+
+| A                         |
+| B                         |
+| B                         |
+| B                         |
++---------------------------+
+4 rows in set (0.00 sec)
+
+mysql> select if (Name="Peter",SELECT 7+2,"B") from PersonInfo;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'SELECT 7+2,"B") from PersonInfo' at line 1
+mysql> select if (Name="Peter", 7+2,"B") from PersonInfo;
++----------------------------+
+| if (Name="Peter", 7+2,"B") |
++----------------------------+
+| 9                          |
+| B                          |
+| B                          |
+| B                          |
++----------------------------+
+4 rows in set (0.03 sec)
+
+mysql> select if (Name="Peter", Salary+2,"B") from PersonInfo;
++---------------------------------+
+| if (Name="Peter", Salary+2,"B") |
++---------------------------------+
+| 102                             |
+| B                               |
+| B                               |
+| B                               |
++---------------------------------+
+4 rows in set (0.00 sec)
+
+mysql> select if (Name="Peter", Salary+2,Salary +1) from PersonInfo;
++---------------------------------------+
+| if (Name="Peter", Salary+2,Salary +1) |
++---------------------------------------+
+|                                   102 |
+|                                   201 |
+|                                   301 |
+|                                  NULL |
++---------------------------------------+
+4 rows in set (0.00 sec)
+--------------------------------------------
+
+mysql> select current_timestamp();
++---------------------+
+| current_timestamp() |
++---------------------+
+| 2012-10-22 16:39:22 |
++---------------------+
+1 row in set (0.02 sec)
+
+------------------------
+
+mysql> select current_date();
++----------------+
+| current_date() |
++----------------+
+| 2012-10-22     |
++----------------+
+1 row in set (0.00 sec)
+
+mysql> select current_date();
++----------------+
+| current_date() |
++----------------+
+| 2012-10-22     |
++----------------+
+1 row in set (0.00 sec)
+
+----------------------------------
+
+
+mysql> select * from PersonInfo;
++----+-------+---------+--------+-----------+--------+
+| ID | Name  | Address | Salary | CountryID | TownID |
++----+-------+---------+--------+-----------+--------+
+|  1 | Peter | 221B    |    100 |         1 |      1 |
+|  2 | John  | 221B    |    200 |         2 |      2 |
+|  3 | Robin | 213B    |    300 |         3 |      3 |
+|  4 | NULL  | NULL    |   NULL |         0 |      0 |
++----+-------+---------+--------+-----------+--------+
+4 rows in set (0.00 sec)
+
+
+mysql> select * from PersonInfo limit 2,1;
++----+-------+---------+--------+-----------+--------+
+| ID | Name  | Address | Salary | CountryID | TownID |
++----+-------+---------+--------+-----------+--------+
+|  3 | Robin | 213B    |    300 |         3 |      3 |
++----+-------+---------+--------+-----------+--------+
+1 row in set (0.00 sec)
+
+mysql> select * from PersonInfo limit 1 offset 2;
++----+-------+---------+--------+-----------+--------+
+| ID | Name  | Address | Salary | CountryID | TownID |
++----+-------+---------+--------+-----------+--------+
+|  3 | Robin | 213B    |    300 |         3 |      3 |
++----+-------+---------+--------+-----------+--------+
+1 row in set (0.00 sec)
+
+------------------------------
+
+TRIGGERS
+
+create table product(id integer not null auto_increment,primary key (id),name varchar (20), quantity integer);
+
+create table product_history (changed_at timestamp,id integer not null, name varchar(20), old_quantity integer);
+
+insert into product values (null,"apples",20);
+insert into product values (null,"chips",15);
+
+create trigger update_product_trigger before update on product for each row insert into product_history values (current_timestamp(),LAST_INSERT_ID(),NEW.name,OLD.quantity);
+
+mysql> select * from product;
++----+--------+----------+
+| id | name   | quantity |
++----+--------+----------+
+|  1 | apples |       20 |
+|  2 | chips  |       15 |
++----+--------+----------+
+2 rows in set (0.00 sec)
+
+
+mysql> select * from product_history;
+Empty set (0.00 sec)
+
+mysql> update product set quantity = 5 where name = "chips";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from product;
++----+--------+----------+
+| id | name   | quantity |
++----+--------+----------+
+|  1 | apples |       20 |
+|  2 | chips  |        5 |
++----+--------+----------+
+2 rows in set (0.00 sec)
+
+mysql> select * from product_history;
++---------------------+----+-------+--------------+
+| changed_at          | id | name  | old_quantity |
++---------------------+----+-------+--------------+
+| 2012-10-25 15:21:05 |  2 | chips |           15 |
++---------------------+----+-------+--------------+
+1 row in set (0.00 sec)
+
+
+--------------------------------------
+rename column
+
+mysql> alter table t change name first_name varchar(20);
+Query OK, 0 rows affected (0.11 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+-------------------------------------
+
+backup table
+
+insert into t_backup(first_name) select * from t;
+--------------------------------------
+
+set sql server mode that stop accepting a default value for not null column;
+stop MySQL from inserting an empty value for fields which don't have a default value and weren't specified in the insert statement;
+
+
+first you can check current server mode: 
+mysql> select @@sql_mode;
++------------+
+| @@sql_mode |
++------------+
+|            |
++------------+
+1 row in set (0.00 sec)
+
+empty because it's not specified.
+you can set it with: 
+ SET [GLOBAL|SESSION] sql_mode='modes'.
+
+Modes can be set locally to the session (connection), or globally for the server.
+
+let see default behavior.
+
+mysql> create table my_tbl(id integer not null, name varchar(20));
+Query OK, 0 rows affected (0.12 sec)
+
+mysql> insert into my_tbl(name) values ("Peter");
+Query OK, 1 row affected, 1 warning (0.00 sec)
+
+We didn't provide id and the query pass with warning:
+mysql> show warnings;
++---------+------+-----------------------------------------+
+| Level   | Code | Message                                 |
++---------+------+-----------------------------------------+
+| Warning | 1364 | Field 'id' doesn't have a default value |
++---------+------+-----------------------------------------+
+1 row in set (0.00 sec)
+
+If enable strict mode that will not be allowed.
+
+mysql> set session sql_mode="strict_all_tables";
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select @@sql_mode;
++-------------------+
+| @@sql_mode        |
++-------------------+
+| STRICT_ALL_TABLES |
++-------------------+
+1 row in set (0.00 sec)
+
+
+
+mysql> select * from my_tbl;
++----+-------+
+| id | name  |
++----+-------+
+|  0 | Peter |
++----+-------+
+1 row in set (0.00 sec)
+
+mysql> insert into my_tbl(name) values ("John");
+ERROR 1364 (HY000): Field 'id' doesn't have a default value
+-------------------------------------------------
+
+mysql> create table my_tbl( id integer not null auto_increment primary key, name varchar(20));
+Query OK, 0 rows affected (0.09 sec)
+
+-------------------------------------------------
+
+
+STORED PROCEDURE
+
+
+
+mysql> select * from my_tbl;
++----+--------+
+| id | name   |
++----+--------+
+|  1 | asd    |
+|  2 | kdfjjg |
+|  3 | Peter  |
++----+--------+
+3 rows in set (0.00 sec)
+
+mysql> desc my_tbl;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int(11)     | NO   | PRI | NULL    | auto_increment |
+| name  | varchar(20) | YES  |     | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+2 rows in set (0.00 sec)
+
+mysql> delimiter | ;
+mysql> create procedure insertMe()
+    -> begin
+    -> insert into my_tbl(id) values (null);
+    -> end
+    -> |
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter ; |
+mysql> call insertMe();
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from my_tbl;
++----+--------+
+| id | name   |
++----+--------+
+|  1 | asd    |
+|  2 | kdfjjg |
+|  3 | Peter  |
+|  4 | NULL   |
++----+--------+
+4 rows in set (0.00 sec)
+
+
+-------------------------------------------------
+
+CONCAT
+
+mysql> create table customers( id integer not null auto_increment primary key, name varchar(20));
+Query OK, 0 rows affected (0.13 sec)
+
+mysql> insert into customers values (null,"Pesho");
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into customers values (null,"Todor");
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from customers;
++----+-------+
+| id | name  |
++----+-------+
+|  1 | Pesho |
+|  2 | Todor |
++----+-------+
+2 rows in set (0.00 sec)
+
+mysql> update customers set name=concat(name,"@home");
+Query OK, 2 rows affected (0.00 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> select * from customers;
++----+------------+
+| id | name       |
++----+------------+
+|  1 | Pesho@home |
+|  2 | Todor@home |
++----+------------+
+2 rows in set (0.00 sec)
+
+
+-------------------------------------------------
+
+
+A stored function can be used within a query. You could then apply it to every row, or within a WHERE clause.
+
+A procedure is executed using the CALL query.
+
+-------------------------------------------------
+
+
+
+FUNCTION
+
+
+mysql> delimiter | ;
+mysql> create function calcIt(number integer)
+    -> returns integer
+    -> begin
+    -> declare num integer;
+    -> set num = number * 10;
+    -> return num;
+    -> end
+    -> |
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> delimiter ; |
+
+mysql> select * from PersonInfo;
++----+-------+---------+--------+-----------+--------+
+| ID | Name  | Address | Salary | CountryID | TownID |
++----+-------+---------+--------+-----------+--------+
+|  1 | Peter | 221B    |    100 |         1 |      1 |
+|  2 | John  | 221B    |    200 |         2 |      2 |
+|  3 | Robin | 213B    |    300 |         3 |      3 |
+|  4 | NULL  | NULL    |   NULL |         0 |      0 |
++----+-------+---------+--------+-----------+--------+
+4 rows in set (0.04 sec)
+
+mysql> select calcIt(salary) from PersonInfo;
++----------------+
+| calcIt(salary) |
++----------------+
+|           1000 |
+|           2000 |
+|           3000 |
+|           NULL |
++----------------+
+4 rows in set (0.02 sec)
+
+
+-------------------------------------------------
+FUNCTION
+
+mysql> create function increase_salary(amount integer)
+    -> returns integer
+    -> begin
+    -> set amount=amount+100;
+    -> return amount;
+    -> end
+    -> |
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> select increase_salary(Salary) from PersonInfo|
++-------------------------+
+| increase_salary(Salary) |
++-------------------------+
+|                     200 |
+|                     300 |
+|                     400 |
+|                    NULL |
++-------------------------+
+4 rows in set (0.02 sec)
+
+mysql> select Salary from PersonInfo|
++--------+
+| Salary |
++--------+
+|    100 |
+|    200 |
+|    300 |
+|   NULL |
++--------+
+4 rows in set (0.00 sec)
+
+-------------------------------------------------
+
+mysql> select * from nametbl;
++-------+-------+
+| name  | major |
++-------+-------+
+| pesho | math  |
+| pesho | cs    |
+| Ivan  | cs    |
++-------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select distinct t.name from nametbl t where t.name = any (select name from nametbl where major="cs") and t.name = any (select name from nametbl where major="math");
++-------+
+| name  |
++-------+
+| pesho |
++-------+
+1 row in set (0.00 sec)
+
+-------------------------------------------------
+
+
+mysql> select * from my_tbl;
++-------+
+| price |
++-------+
+|     7 |
+|     7 |
+|     5 |
+|     5 |
+|     5 |
++-------+
+5 rows in set (0.02 sec)
+
+we want: (7+5)/2 = 6
+
+mysql> select avg(price) as average from (select distinct price from my_tbl) as t;
++---------+
+| average |
++---------+
+|  6.0000 |
++---------+
+1 row in set (0.18 sec)
+
+
+-------------------------------------------------
+
+PROCEDURE
+
+mysql> create procedure incr(in amount integer,out total integer)
+    -> begin
+    -> set total = amount + 50;
+    -> end
+    -> |
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> delimiter ; |
+mysql> 
+mysql> 
+mysql> set @t = 0;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call incr(20,@t);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> select @t;
++------+
+| @t   |
++------+
+|   70 |
++------+
+1 row in set (0.00 sec)
+------------------------------------
+
+PROCEDURE
+
+mysql> create procedure incr(inout amount integer)
+    -> begin
+    -> set amount = amount + 50;
+    -> end
+    -> |
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter ; |
+mysql> set @a = 50;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call incr (@a);
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select @a;
++------+
+| @a   |
++------+
+|  100 |
++------+
+1 row in set (0.00 sec)
+
+----------------------------------
+
+PROCEDURE
+
+mysql> create procedure incr(in amount integer)
+    -> begin
+    -> set amount=amount+50;
+    -> end
+    -> |
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> set @am=20|
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call incr(@am)|
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select @am|
++------+
+| @am  |
++------+
+|   20 |
++------+
+1 row in set (0.00 sec)
+
+-------------------------------------
+
+PROCEDURE
+
+mysql> create procedure incr(out amount integer)
+    -> begin
+    -> set amount=amount+50;
+    -> end|
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> set @am=20|
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call incr(@am)|
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select @am|
++------+
+| @am  |
++------+
+| NULL |
++------+
+1 row in set (0.00 sec)
+-------------------------------------
+
+IGNORE
+
+
+mysql> create table my_tbl
+    -> (
+    -> id integer not null auto_increment primary key,
+    -> name varchar(20));
+Query OK, 0 rows affected (0.24 sec)
+
+mysql> insert into my_tbl values (null,"peter");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from my_tbl;
++----+-------+
+| id | name  |
++----+-------+
+|  1 | peter |
++----+-------+
+1 row in set (0.03 sec)
+
+
+mysql> insert ignore into my_tbl select * from my_tbl;
+Query OK, 0 rows affected (0.00 sec)
+Records: 1  Duplicates: 1  Warnings: 0
+
+mysql> select * from my_tbl;
++----+-------+
+| id | name  |
++----+-------+
+|  1 | peter |
++----+-------+
+1 row in set (0.02 sec)
+
+--------------------------------
+
+INSERT INTO SELECT
+
+mysql> create table my_tbl(
+    -> id integer not null auto_increment primary key,
+    -> name varchar (20));
+Query OK, 0 rows affected (0.14 sec)
+
+mysql> insert into my_tbl values (null,"peter");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into my_tbl values (null,"simon");
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from my_tbl;
++----+-------+
+| id | name  |
++----+-------+
+|  1 | peter |
+|  2 | simon |
++----+-------+
+2 rows in set (0.00 sec)
+
+mysql> insert into my_tbl select null,name from my_tbl;
+Query OK, 2 rows affected (0.08 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from my_tbl;
++----+-------+
+| id | name  |
++----+-------+
+|  1 | peter |
+|  2 | simon |
+|  3 | peter |
+|  4 | simon |
++----+-------+
+4 rows in set (0.00 sec)
+-------------------------------------
+
+INSERT INTO SELECT PROCEDURE
+
+mysql> create table my_tbl(
+    -> id integer not null auto_increment primary key,
+    -> name varchar(20));
+Query OK, 0 rows affected (0.15 sec)
+
+mysql> insert into my_tbl values (null,"peter");
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into my_tbl values (null,"simon");
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from my_tbl;
++----+-------+
+| id | name  |
++----+-------+
+|  1 | peter |
+|  2 | simon |
++----+-------+
+2 rows in set (0.00 sec)
+
+mysql> delimiter | ;
+mysql> create procedure insertRecords() begin declare i integer default 0; while i<10 do insert into my_tbl select null,name from my_tbl; set i=i+1; end while; end|
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from my_tbl;
+    -> |
++----+-------+
+| id | name  |
++----+-------+
+|  1 | peter |
+|  2 | simon |
++----+-------+
+2 rows in set (0.00 sec)
+
+mysql> call insertRecords()|
+Query OK, 1024 rows affected (0.00 sec)
+
+mysql> select * from my_tbl limit 5;
+    -> |
++----+-------+
+| id | name  |
++----+-------+
+|  1 | peter |
+|  2 | simon |
+|  3 | peter |
+|  4 | simon |
+|  5 | peter |
++----+-------+
+5 rows in set (0.00 sec)
+
+mysql> select count(*) from my_tbl;
+    -> |
++----------+
+| count(*) |
++----------+
+|     2048 |
++----------+
+1 row in set (0.02 sec)
+-----------------------------------------
+
+INSERT INTO SELECT BETTER PROCEDURE
+
+mysql> create procedure insert_records(in n integer)
+    -> begin
+    -> declare i integer default 0;
+    -> while i<n do
+    -> insert into my_tbl select null,name from my_tbl;
+    -> set i=i+1;
+    -> end while;
+    -> end|
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> select * from my_tbl;
+    -> |
+Empty set (0.00 sec)
+
+mysql> delimiter ;|
+mysql> insert into my_tbl values (null,"peter");
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into my_tbl values (null,"simon");
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from my_tbl;
++----+-------+
+| id | name  |
++----+-------+
+|  1 | peter |
+|  2 | simon |
++----+-------+
+2 rows in set (0.00 sec)
+
+mysql> call insert_records(3);
+Query OK, 8 rows affected (0.00 sec)
+
+mysql> select * from my_tbl;
++----+-------+
+| id | name  |
++----+-------+
+|  1 | peter |
+|  2 | simon |
+|  3 | peter |
+|  4 | simon |
+|  5 | peter |
+|  6 | simon |
+|  7 | peter |
+|  8 | simon |
+|  9 | peter |
+| 10 | simon |
+| 11 | peter |
+| 12 | simon |
+| 13 | peter |
+| 14 | simon |
+| 15 | peter |
+| 16 | simon |
++----+-------+
+16 rows in set (0.00 sec)
+---------------------------------------------
+
+
+VIEW
+
+
+mysql> select * from PersonInfo;
++----+-------+---------+--------+-----------+--------+
+| ID | Name  | Address | Salary | CountryID | TownID |
++----+-------+---------+--------+-----------+--------+
+|  1 | Peter | 221B    |    100 |         1 |      1 |
+|  2 | John  | 221B    |    200 |         2 |      2 |
+|  3 | Robin | 213B    |    300 |         3 |      3 |
+|  4 | NULL  | NULL    |   NULL |         0 |      0 |
++----+-------+---------+--------+-----------+--------+
+4 rows in set (0.05 sec)
+
+mysql> create view top_three as select * from PersonInfo limit 3;
+Query OK, 0 rows affected (0.06 sec)
+
+
+mysql> select name from top_three;
++-------+
+| name  |
++-------+
+| Peter |
+| John  |
+| Robin |
++-------+
+3 rows in set (0.00 sec)
+
+mysql> select Salary*5 from top_three;
++----------+
+| Salary*5 |
++----------+
+|      500 |
+|     1000 |
+|     1500 |
++----------+
+3 rows in set (0.08 sec)
+------------------------------------------
